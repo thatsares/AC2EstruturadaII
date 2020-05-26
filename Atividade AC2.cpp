@@ -39,14 +39,21 @@ void mostraCad(prop *p,int qreg);
 void cadastro_end(prop *p, int qreg);
 void menu(int qreg, prop *p);
 void cadastroImo(prop *p,int qreg);
+int	 busca_prop(prop *p,int num_reg);
 
 int main()
 {
 	prop *pd=NULL;
+	char op;
 	int qreg;
 	aloca(&pd,1);
+	do{
 	qreg=verifica();
 	menu(qreg,pd);
+	
+	printf("Deseja continuar?: s/n");
+	scanf("%c", &op);
+	}while(op != 'n' || 'N');
 	
 	return 0;
 }//main
@@ -172,6 +179,7 @@ void mostraCad(prop *p,int qreg)
 void menu(int qreg, prop *p)
 {
 	int cont;
+	int registro;
 	printf("\n-- Projeto Imobiliaria --\n");
 	do
 	{
@@ -189,6 +197,9 @@ void menu(int qreg, prop *p)
 				cadastroImo(p,qreg);
 				break;
 			case 3:
+				printf("Insira o codigo do proprietario que deseja encontrar: ");
+				scanf("%i",&registro);
+				qreg = busca_prop(p,registro);
 				mostraCad(p,qreg);
 				break;
 			case 4:
@@ -219,3 +230,29 @@ void cadastroImo(prop *p,int qreg)
 		fflush(stdin);
 	}
 }//cadastra o imovel do proprietario
+
+int	busca_prop(prop *p,int num_reg)
+{
+int i,achou=-1,qreg;
+FILE *fptr=NULL;
+
+qreg=verifica();
+system("cls");
+if((fptr=fopen("Cadastro.bin","rb"))==NULL)
+  printf("\nErro\n\n");
+else
+  {
+  for(i=0;i<qreg;i++)
+    {
+	fseek(fptr,i*sizeof(prop),0);
+	fread(p,sizeof(prop),1,fptr);	
+	if(p->reg_prop==num_reg)
+	  {
+	  achou=i;   //posicao no arquivo
+	  i=qreg;
+      }//if
+    }//for
+  fclose(fptr);  //DENTRO do else - abriu com rb
+  }//else
+return achou;
+}//busca
