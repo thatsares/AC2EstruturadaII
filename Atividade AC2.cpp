@@ -158,6 +158,7 @@ void mostraCad(prop *p,int qreg)
 		{
 			fseek(fptr,i*sizeof(prop),0);
 			fread(p,sizeof(prop),1,fptr);
+			printf("-----PROPRIETARIOS CADASTRADOS------\n");
 			printf("\nRegistro: %i",p->reg_prop);
 			printf("\nNome: %s",p->nome);
 			printf("\nCPF: %i",p->CPF);
@@ -189,6 +190,7 @@ void menu(int qreg, prop *p)
 		switch (cont)
 		{
 			case 1:
+				qreg = verifica();
 				cadastro(p,qreg+1);
 				qreg++;
 				fflush(stdin);
@@ -197,9 +199,6 @@ void menu(int qreg, prop *p)
 				cadastroImo(p,qreg);
 				break;
 			case 3:
-				printf("Insira o codigo do proprietario que deseja encontrar: ");
-				scanf("%i",&registro);
-				qreg = busca_prop(p,registro);
 				mostraCad(p,qreg);
 				break;
 			case 4:
@@ -222,11 +221,11 @@ void cadastroImo(prop *p,int qreg)
 	}while(quantimo < 1 && quantimo > 5);
 	for(i=0;i<quantimo;i++)
 	{
-		p->casa->num_casa = i; 
-		printf("\nNumero casa: %i",p->casa->num_casa);
+		(p->casa)->num_casa = i; 
+		printf("\nNumero casa: %i",(p->casa->num_casa)+1);
 		fflush(stdin);
-		printf("Casa Alugada (A) / Casa Livre (L): ");
-		scanf("%c",p->casa->status_casa);
+		printf("\nCasa Alugada (A) / Casa Livre (L): ");
+		scanf("%c",&(p->casa->status_casa));
 		fflush(stdin);
 	}
 }//cadastra o imovel do proprietario
